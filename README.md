@@ -1,43 +1,37 @@
-# Astro Starter Kit: Minimal
+# Josué Martínez Moreno - Portafolio Personal
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Este es el repositorio de mi portafolio personal, reconstruido y optimizado como una aplicación web estática para garantizar la máxima velocidad, seguridad y un despliegue eficiente en **Cloudflare Pages**.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Stack Tecnológico 🚀
 
-## 🚀 Project Structure
+El proyecto utiliza un stack moderno y enfocado en el rendimiento:
+- **[Astro](https://astro.build/) (v7)** - Framework principal para la generación de sitios estáticos (SSG).
+- **[React](https://react.dev/) (v19)** - Utilizado mediante *Astro Islands* para los componentes interactivos.
+- **[Tailwind CSS](https://tailwindcss.com/) (v4)** - Motor de estilos integrado mediante Vite para un diseño 100% responsivo y temas dinámicos.
+- **TypeScript** - Tipado estricto para mayor seguridad en el código.
 
-Inside of your Astro project, you'll see the following folders and files:
+## Características Principales 🌟
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+- **Carga Ultra Rápida**: Generación completamente estática, sin *cold-starts*.
+- **Soporte Bilingüe (i18n)**: Rutas dinámicas e interconectadas en Español (`/`) e Inglés (`/en/`).
+- **SEO Avanzado**: Meta tags (Open Graph, Twitter Cards), `robots.txt` dinámico y marcado de datos estructurados (JSON-LD).
+- **Dark Mode**: Soporte nativo para modo oscuro/claro con prevención de parpadeo (Anti-flicker).
+- **Responsive Design**: Completamente adaptable a cualquier tamaño de pantalla.
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Instalación y Desarrollo Local 💻
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Asegúrate de contar con **Node.js LTS (>=24.19.0)** y **pnpm** instalados.
 
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+1. Instala las dependencias:
+   ```bash
+   pnpm install
+   ```
+2. Ejecuta el servidor de desarrollo local:
+   ```bash
+   pnpm dev
+   ```
+3. Para compilar la versión de producción:
+   ```bash
+   pnpm build
+   ```
+El proyecto generado se ubicará en la carpeta `/dist`, listo para ser desplegado.
