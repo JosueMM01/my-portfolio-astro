@@ -1,0 +1,159 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { metadata } from '../../data/metadata';
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Websites",
+  "provider": {
+    "@type": "Person",
+    "name": metadata.name,
+    "url": metadata.url
+  },
+  "areaServed": "MX",
+  "serviceType": "Web design and development",
+  "url": `${metadata.url}/en/paginas-web/`,
+  "description": "Website plans with technical SEO, performance and professional deployment.",
+  "offers": {
+    "@type": "AggregateOffer",
+    "priceCurrency": "MXN",
+    "offers": [
+      { "@type": "Offer", "name": "Option A — Basic (promo)", "price": 4500, "priceCurrency": "MXN", "availability": "https://schema.org/InStock" },
+      { "@type": "Offer", "name": "Option B — Standard", "price": 5000, "priceCurrency": "MXN", "availability": "https://schema.org/InStock" },
+      { "@type": "Offer", "name": "Option C — Pro with AI", "price": 6500, "priceCurrency": "MXN", "availability": "https://schema.org/InStock" }
+    ]
+  }
+};
+---
+
+<BaseLayout
+  lang="en"
+  title="Websites | Fast, SEO‑optimized web design"
+  description="Website plans with technical SEO, performance and a professional deployment."
+  currentPath="/en/paginas-web/"
+  altPath="/paginas-web/"
+>
+  <section class="py-12 md:py-16">
+    <h1 class="text-3xl md:text-5xl font-bold text-center mb-4 dark:text-white" data-aos="fade-up">
+      Website plans
+    </h1>
+    <p class="text-base md:text-lg text-center max-w-3xl mx-auto text-gray-700 dark:text-gray-300" data-aos="fade-up" data-aos-delay="100">
+      Choose the plan that best fits your project. All include solid technical SEO, performance and a professional deployment.
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-6 mt-12 max-w-6xl mx-auto">
+      {/* Plan A */}
+      <div class="p-6 bg-gray-100 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-brand-blue/30 flex flex-col h-full shadow-xs" data-aos="fade-up" data-aos-delay="100">
+        <div class="flex items-baseline justify-between mb-2">
+          <h2 class="text-xl font-bold dark:text-white">Option A — Basic (promo)</h2>
+          <span class="text-xs px-2.5 py-1 rounded bg-gray-200/80 dark:bg-white/10 font-medium">Delivery 7 business days</span>
+        </div>
+        <p class="text-3xl font-extrabold mb-4 dark:text-white">$4,500 <span class="text-base font-medium text-gray-500">MXN</span></p>
+        <ul class="space-y-2 text-gray-700 dark:text-gray-300 mb-6 list-disc list-inside card-snippet text-sm">
+          <li>Up to 4 pages (Home, Services/Products, About and Contact)</li>
+          <li>Deployment and domain setup (domain purchased by client)</li>
+        </ul>
+        <div class="flex-1"></div>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Payment: 50% upfront ($2,250) / 50% on delivery ($2,250).</p>
+        <div class="mt-auto grid grid-cols-1 gap-3">
+          <button type="button" data-modal-target="#modal-plan-a-en" class="w-full text-center bg-white dark:bg-transparent border border-brand-cyan text-brand-cyan font-bold py-2.5 px-4 rounded-xl hover:bg-brand-cyan/10 transition cursor-pointer text-sm">View details</button>
+          <a href={metadata.whatsapp} target="_blank" rel="noopener noreferrer" class="w-full text-center bg-brand-cyan text-white font-bold py-2.5 px-4 rounded-xl hover:opacity-90 transition text-sm">I want Option A</a>
+        </div>
+      </div>
+
+      {/* Plan B Featured */}
+      <div class="p-6 bg-white dark:bg-monokai-bg rounded-2xl border-2 border-brand-cyan shadow-lg relative flex flex-col h-full" data-aos="fade-up" data-aos-delay="150">
+        <span class="absolute -top-3.5 right-6 text-xs font-bold bg-brand-cyan text-white px-3 py-1 rounded-full uppercase tracking-wide">Recommended</span>
+        <div class="flex items-baseline justify-between mb-2">
+          <h2 class="text-xl font-bold dark:text-white">Option B — Standard</h2>
+          <span class="text-xs px-2.5 py-1 rounded bg-gray-200/80 dark:bg-white/10 font-medium">+ 7‑day support</span>
+        </div>
+        <p class="text-3xl font-extrabold mb-4 dark:text-white">$5,000 <span class="text-base font-medium text-gray-500">MXN</span></p>
+        <ul class="space-y-2 text-gray-700 dark:text-gray-300 mb-6 list-disc list-inside card-snippet text-sm">
+          <li>Everything in Option A</li>
+          <li>1 extra content adjustment</li>
+          <li>7‑day post‑delivery support for minor fixes</li>
+        </ul>
+        <div class="flex-1"></div>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Payment: 50% upfront ($2,500) / 50% on delivery ($2,500).</p>
+        <a href={metadata.whatsapp} target="_blank" rel="noopener noreferrer" class="mt-auto inline-block w-full text-center bg-brand-cyan text-white font-bold py-2.5 px-4 rounded-xl hover:opacity-90 transition text-sm">I want Option B</a>
+      </div>
+
+      {/* Plan C Pro AI */}
+      <div class="p-6 bg-gray-100 dark:bg-gray-800/50 rounded-2xl border border-gray-200 dark:border-brand-blue/30 flex flex-col h-full shadow-xs" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex items-baseline justify-between mb-2">
+          <h2 class="text-xl font-bold dark:text-white">Option C — Pro with AI</h2>
+          <span class="text-xs px-2.5 py-1 rounded bg-gray-200/80 dark:bg-white/10 font-medium">Delivery 10 business days</span>
+        </div>
+        <p class="text-3xl font-extrabold mb-1 dark:text-white">$6,500 <span class="text-base font-medium text-gray-500">MXN</span> <span class="text-xs font-semibold bg-gray-200/80 dark:bg-white/10 text-gray-800 dark:text-gray-200 ml-2 px-2 py-0.5 rounded">Installation</span></p>
+        <ul class="space-y-2 text-gray-700 dark:text-gray-300 mb-6 list-disc list-inside card-snippet text-sm">
+          <li>Everything in Option B</li>
+          <li>AI chatbot embedded in your site (answers about your brand)</li>
+        </ul>
+        <div class="flex-1"></div>
+        <p class="text-xs text-gray-600 dark:text-gray-400 mb-4">Payment: 50% upfront ($3,250) / 50% on delivery ($3,250).</p>
+        <div class="mt-auto grid grid-cols-1 gap-3">
+          <button type="button" data-modal-target="#modal-plan-c-en" class="w-full text-center bg-white dark:bg-transparent border border-brand-cyan text-brand-cyan font-bold py-2.5 px-4 rounded-xl hover:bg-brand-cyan/10 transition cursor-pointer text-sm">View details</button>
+          <a href={metadata.whatsapp} target="_blank" rel="noopener noreferrer" class="w-full text-center bg-brand-cyan text-white font-bold py-2.5 px-4 rounded-xl hover:opacity-90 transition text-sm">I want Option C</a>
+        </div>
+      </div>
+    </div>
+
+    <p class="mt-8 text-center text-xs text-gray-500 max-w-3xl mx-auto leading-relaxed">
+      Prices in MXN. VAT not included. Domain, hosting and third‑party image/service licenses not included. Delivery times are counted in business days (Monday to Friday) and depend on content reception and timely approvals.
+    </p>
+  </section>
+
+  {/* Modal Plan A (EN) */}
+  <div id="modal-plan-a-en" class="hidden fixed inset-0 z-50 modal-backdrop p-4" role="dialog" aria-modal="true" aria-labelledby="modal-a-title-en" aria-hidden="true">
+    <div data-modal-panel class="w-full max-w-2xl rounded-2xl bg-white dark:bg-monokai-bg border border-gray-200 dark:border-brand-blue/30 shadow-2xl overflow-hidden mx-auto my-auto">
+      <div class="p-5 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+        <h3 id="modal-a-title-en" class="text-lg font-bold dark:text-white">Details — Option A</h3>
+        <button type="button" data-modal-close class="p-1 rounded-md text-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer" aria-label="Close">✕</button>
+      </div>
+      <div class="p-6 space-y-4 text-gray-700 dark:text-gray-300 text-sm modal-body">
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Includes" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Includes core pages (Home, Services/Products, About and Contact).</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/brand.svg" alt="Brand" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Brand section, social links and WhatsApp button.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Contact" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Contact form to your email.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/map-pin.svg" alt="Map" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Business location map (Google Maps).</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="SEO" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Basic technical SEO (tags, sitemap and schema) and light image optimization.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Deploy" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Deployment with domain setup (domain purchased by client).</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Reviews" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Two review rounds.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/bolt.svg" alt="Delivery" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Estimated delivery in 7 business days after receiving complete content.</span></li>
+        </ul>
+      </div>
+      <div class="p-5 border-t border-gray-200 dark:border-white/10 flex justify-end gap-3">
+        <button type="button" data-modal-close class="px-4 py-2 text-sm font-semibold rounded-xl bg-gray-100 dark:bg-white/10 cursor-pointer">Close</button>
+        <a href={metadata.whatsapp} target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-cyan text-white hover:opacity-90 transition">I want Option A</a>
+      </div>
+    </div>
+  </div>
+
+  {/* Modal Plan C (EN) */}
+  <div id="modal-plan-c-en" class="hidden fixed inset-0 z-50 modal-backdrop p-4" role="dialog" aria-modal="true" aria-labelledby="modal-c-title-en" aria-hidden="true">
+    <div data-modal-panel class="w-full max-w-2xl rounded-2xl bg-white dark:bg-monokai-bg border border-gray-200 dark:border-brand-blue/30 shadow-2xl overflow-hidden mx-auto my-auto">
+      <div class="p-5 border-b border-gray-200 dark:border-white/10 flex items-center justify-between">
+        <h3 id="modal-c-title-en" class="text-lg font-bold dark:text-white">Details — Option C (Pro with AI)</h3>
+        <button type="button" data-modal-close class="p-1 rounded-md text-gray-500 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 cursor-pointer" aria-label="Close">✕</button>
+      </div>
+      <div class="p-6 space-y-4 text-gray-700 dark:text-gray-300 text-sm modal-body">
+        <ul class="space-y-3">
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Chatbot" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Installation of an embedded AI chatbot that answers about your brand.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Load" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Initial knowledge load (up to 20 pages or 10 documents) and a guide to update answers.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Support" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Includes 14‑day post‑delivery support.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Monthly" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Monthly management from $699 MXN <span class="text-xs text-gray-500">(initial price; includes VPS and LLM consumption up to plan limits; may vary based on API consumption and usage volume)</span>.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Delivery" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Estimated delivery in 10 business days.</span></li>
+          <li class="flex items-start gap-3"><img src="/assets/icons/check-circle.svg" alt="Extras" class="w-5 h-5 mt-0.5 opacity-80 shrink-0" /><span>Does not include n8n automations (optional).</span></li>
+        </ul>
+      </div>
+      <div class="p-5 border-t border-gray-200 dark:border-white/10 flex justify-end gap-3">
+        <button type="button" data-modal-close class="px-4 py-2 text-sm font-semibold rounded-xl bg-gray-100 dark:bg-white/10 cursor-pointer">Close</button>
+        <a href={metadata.whatsapp} target="_blank" rel="noopener noreferrer" class="px-4 py-2 text-sm font-semibold rounded-xl bg-brand-cyan text-white hover:opacity-90 transition">I want Option C</a>
+      </div>
+    </div>
+  </div>
+
+  <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />
+</BaseLayout>

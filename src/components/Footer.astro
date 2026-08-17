@@ -1,0 +1,95 @@
+---
+import { metadata } from '../data/metadata';
+
+interface Props {
+  lang?: 'es' | 'en';
+  currentPath?: string;
+}
+
+const { lang = 'es', currentPath = '/' } = Astro.props;
+const inEnglish = lang === 'en';
+const displayEmail = inEnglish ? metadata.emailEn : metadata.email;
+const currentYear = new Date().getFullYear();
+
+const homePath = inEnglish ? '/en/' : '/';
+const baseHref = currentPath === homePath || currentPath === homePath.replace(/\/$/, '') ? '' : homePath;
+---
+
+<footer class="mt-16 border-t border-gray-200 dark:border-brand-blue/30 bg-gray-50 dark:bg-gray-800/50 transition-colors">
+  <div class="container mx-auto px-6 py-10 text-gray-700 dark:text-gray-300">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      
+      {/* Column 1: Brand */}
+      <div class="text-center md:text-left">
+        <a href={homePath} class="inline-flex items-center gap-2 group">
+          <img src="/assets/images/icon.png" alt="Logo" class="h-8 w-8 rounded" />
+          <span class="font-semibold text-lg text-gray-900 dark:text-white group-hover:text-brand-blue transition-colors">
+            {metadata.name}
+          </span>
+        </a>
+        <p class="mt-3 text-sm text-gray-600 dark:text-gray-400">
+          {inEnglish ? 'Web development and custom software.' : 'Desarrollo web y software a medida.'}
+        </p>
+        <p class="mt-4 text-xs text-gray-500">
+          &copy; <span>{currentYear}</span> {metadata.name}. {inEnglish ? 'All rights reserved.' : 'Todos los derechos reservados.'}
+        </p>
+      </div>
+
+      {/* Column 2: Navigation */}
+      <div class="md:mx-auto text-center md:text-left">
+        <h3 class="text-sm font-semibold tracking-wide text-gray-900 dark:text-gray-200 uppercase">
+          {inEnglish ? 'Navigation' : 'Enlaces'}
+        </h3>
+        <div class="mx-auto md:mx-0 my-2 h-px w-10 bg-brand-blue/40"></div>
+        <ul class="mt-4 space-y-2 text-sm flex flex-col items-center md:items-start">
+          <li>
+            <a href={homePath} class="hover:text-brand-blue transition-colors">{inEnglish ? 'Home' : 'Inicio'}</a>
+          </li>
+          <li>
+            <a href={`${baseHref}#portafolio`} class="hover:text-brand-blue transition-colors">{inEnglish ? 'Portfolio' : 'Portafolio'}</a>
+          </li>
+          <li>
+            <a href={`${baseHref}#quien-soy`} class="hover:text-brand-blue transition-colors">{inEnglish ? 'About me' : 'Quién soy'}</a>
+          </li>
+          <li>
+            <a href={`${baseHref}#contacto`} class="hover:text-brand-blue transition-colors">{inEnglish ? 'Contact' : 'Contacto'}</a>
+          </li>
+        </ul>
+      </div>
+
+      {/* Column 3: Contact & Social */}
+      <div class="md:justify-self-end text-center md:text-left">
+        <h3 class="text-sm font-semibold tracking-wide text-gray-900 dark:text-gray-200 uppercase">
+          {inEnglish ? 'Contact' : 'Contáctanos'}
+        </h3>
+        <div class="mx-auto md:mx-0 my-2 h-px w-10 bg-brand-blue/40"></div>
+        <ul class="mt-4 space-y-2 text-sm flex flex-col items-center md:items-start">
+          <li>
+            <a href={`mailto:${displayEmail}`} class="hover:text-brand-blue transition-colors">{displayEmail}</a>
+          </li>
+          <li>
+            <a href={`https://wa.me/52${metadata.phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" class="hover:text-brand-blue transition-colors">
+              {metadata.phone}
+            </a>
+          </li>
+        </ul>
+
+        <div class="mt-5 flex items-center justify-center md:justify-start gap-4">
+          <a href={metadata.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="group inline-flex items-center gap-1.5 hover:text-brand-blue transition-colors">
+            <img src="/assets/icons/github.svg" alt="GitHub" class="h-5 w-5 dark:invert" />
+            <span class="text-sm font-medium">GitHub</span>
+          </a>
+          <a href={metadata.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="group inline-flex items-center gap-1.5 hover:text-brand-blue transition-colors">
+            <img src="/assets/icons/linkedin.svg" alt="LinkedIn" class="h-5 w-5 dark:invert" />
+            <span class="text-sm font-medium">LinkedIn</span>
+          </a>
+          <a href={metadata.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="group inline-flex items-center gap-1.5 hover:text-brand-blue transition-colors">
+            <img src="/assets/icons/whatsapp.svg" alt="WhatsApp" class="h-5 w-5 dark:invert" />
+            <span class="text-sm font-medium">WhatsApp</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</footer>

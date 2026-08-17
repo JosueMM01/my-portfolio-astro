@@ -1,0 +1,258 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroCanvas from '../components/HeroCanvas.astro';
+import Typewriter from '../components/Typewriter.astro';
+import { metadata } from '../data/metadata';
+
+const spanishPhrases = [
+  'Hola, soy Josue 👋',
+  'Soy Desarrollador de Software',
+  'Full Stack Developer'
+];
+
+const projects = [
+  {
+    title: 'SGDH Systems',
+    description: 'Plataforma para control clínico de inventario hospitalario con trazabilidad certificada y métricas operativas.',
+    image: 'https://placehold.co/1200x800/272822/7FBF1E?text=SGDH',
+    alt: 'Plataforma SGDH',
+    link: 'https://sgdh.systems/',
+    tech: [
+      { name: 'Laravel', icon: '/assets/icons/tech/laravel.svg' },
+      { name: 'Google Sign-In', icon: '/assets/icons/tech/google.svg' },
+      { name: 'PHP', icon: '/assets/icons/tech/php.svg' },
+      { name: 'REST API', icon: '/assets/icons/tech/restapi.svg' },
+      { name: 'MySQL', icon: '/assets/icons/tech/mysql.svg' },
+      { name: 'SMTP', icon: '/assets/icons/tech/smtp.svg' },
+    ]
+  },
+  {
+    title: 'Pixel Crunch',
+    description: 'Web app para comprimir y optimizar imágenes en el navegador con enfoque 100% privado y open source.',
+    image: 'https://placehold.co/1200x800/272822/FD971F?text=Pixel+Crunch',
+    alt: 'Aplicación Pixel Crunch',
+    link: 'https://pixel-crunch.josuem01.dev/',
+    tech: [
+      { name: 'Astro', icon: '/assets/icons/tech/astro.svg' },
+      { name: 'React', icon: '/assets/icons/tech/react.svg' },
+      { name: 'Tailwind CSS', icon: '/assets/icons/tech/tailwindcss.svg' },
+      { name: 'PWA', icon: '/assets/icons/tech/pwa.svg' },
+    ]
+  },
+  {
+    title: 'Urban Hat',
+    description: 'Ecommerce de gorras urbanas con catálogo, categorías y experiencia enfocada en estilo streetwear.',
+    image: 'https://placehold.co/1200x800/272822/F92672?text=Urban+Hat',
+    alt: 'Tienda Urban Hat',
+    link: 'https://urban-hat.josuem01.dev/',
+    tech: [
+      { name: 'Next.js', icon: '/assets/icons/tech/nextjs.svg' },
+      { name: 'MongoDB', icon: '/assets/icons/tech/mongodb.svg' },
+      { name: 'Cloudinary', icon: '/assets/icons/tech/cloudinary.svg' },
+    ]
+  },
+  {
+    title: 'Negocios que Fluyen',
+    description: 'Sitio web corporativo y blog para consultoría de negocios.',
+    image: 'https://placehold.co/1200x800/272822/A6E22E?text=Negocios+que+Fluyen',
+    alt: 'Sitio web de Negocios que Fluyen',
+    link: 'https://www.negocios-que-fluyen.com/',
+    tech: [
+      { name: '11ty', icon: '/assets/icons/tech/eleventy.svg' }
+    ]
+  },
+  {
+    title: 'Heemsa',
+    description: 'Página de presentación para empresa de servicios industriales.',
+    image: 'https://placehold.co/1200x800/272822/F92672?text=Heemsa',
+    alt: 'Sitio web de Heemsa',
+    link: 'https://www.heemsa.com/',
+    tech: [
+      { name: '11ty', icon: '/assets/icons/tech/eleventy.svg' }
+    ]
+  },
+  {
+    title: 'PFR Seguros',
+    description: 'Sitio web informativo para correduría de seguros.',
+    image: 'https://placehold.co/1200x800/272822/66D9EF?text=PFR+Seguros',
+    alt: 'Sitio web de PFR Seguros',
+    link: 'https://pfrseguros.com.mx/',
+    tech: [
+      { name: '11ty', icon: '/assets/icons/tech/eleventy.svg' }
+    ]
+  }
+];
+
+const techStack = [
+  { name: 'TypeScript', icon: '/assets/icons/tech/typescript.svg' },
+  { name: 'Astro', icon: '/assets/icons/tech/astro.svg' },
+  { name: 'Next.js', icon: '/assets/icons/tech/nextjs.svg' },
+  { name: 'NestJS', icon: '/assets/icons/tech/nestjs.svg' },
+  { name: 'Laravel', icon: '/assets/icons/tech/laravel.svg' },
+  { name: 'MySQL', icon: '/assets/icons/tech/mysql.svg' },
+  { name: 'MongoDB', icon: '/assets/icons/tech/mongodb.svg' },
+  { name: 'Git', icon: '/assets/icons/tech/git.svg' },
+  { name: 'Linux', icon: '/assets/icons/tech/linux.svg' }
+];
+---
+
+<BaseLayout lang="es" currentPath="/">
+
+  {/* Hero Section */}
+  <section id="inicio" class="relative overflow-hidden text-center min-h-[80vh] flex flex-col items-center justify-center py-12 md:py-20">
+    <HeroCanvas />
+
+    <div class="relative z-10 max-w-3xl mx-auto px-4">
+      <h1 class="text-3xl md:text-5xl font-bold dark:text-white mb-3 min-h-[86px] md:min-h-[124px] flex items-center justify-center tracking-tight" data-aos="fade-up">
+        <Typewriter phrases={spanishPhrases} />
+      </h1>
+      <p class="text-base md:text-xl text-gray-600 dark:text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="110">
+        Desarrollador full stack con ganas de poner mis conocimientos en práctica.
+      </p>
+      <div class="flex justify-center">
+        <a
+          href="#portafolio"
+          data-aos="fade-up"
+          data-aos-delay="150"
+          class="inline-flex items-center justify-center w-[220px] md:w-[240px] text-center bg-brand-cyan text-white font-bold py-3.5 px-6 rounded-xl hover:opacity-90 transition-all shadow-md hover:shadow-lg"
+        >
+          Ver portafolio
+        </a>
+      </div>
+    </div>
+  </section>
+
+  {/* Portfolio Section */}
+  <section id="portafolio" class="py-16 md:py-24">
+    <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white" data-aos="fade-up">
+      Portafolio
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+      {projects.map((project, idx) => (
+        <div
+          class="bg-gray-100 dark:bg-gray-800/50 rounded-xl overflow-hidden border border-gray-200 dark:border-monokai-cyan/30 flex flex-col justify-between transition-transform hover:-translate-y-1 duration-300"
+          data-aos="fade-up"
+          data-aos-delay={100 + idx * 50}
+        >
+          <div>
+            <img
+              src={project.image}
+              alt={project.alt}
+              class="w-full h-48 object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div class="p-6">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <h3 class="text-2xl font-bold dark:text-monokai-yellow">{project.title}</h3>
+                {project.badge && (
+                  <span class="text-[11px] px-2.5 py-1 rounded-full bg-monokai-orange/15 text-monokai-orange font-bold uppercase tracking-wider">
+                    {project.badge}
+                  </span>
+                )}
+              </div>
+              <p class="text-gray-600 dark:text-gray-300 mb-4 text-sm leading-relaxed">
+                {project.description}
+              </p>
+              <div class="project-stack-icons flex flex-wrap items-center gap-2 mb-4" aria-label={`Stack ${project.title}`}>
+                {project.tech.map((t) => (
+                  <img src={t.icon} alt={t.name} title={t.name} class="w-5 h-5" />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div class="px-6 pb-6 pt-0">
+            <a
+              href={project.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-bold text-brand-blue dark:text-brand-cyan hover:underline inline-flex items-center gap-1 text-sm"
+            >
+              Ver Proyecto <span>&rarr;</span>
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {/* Skills Marquee Section */}
+  <section id="skills" class="py-16">
+    <div class="max-w-6xl mx-auto px-6">
+      <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white" data-aos="fade-up">
+        Stack Tecnológico
+      </h2>
+      <div class="tech-carousel" data-aos="fade-up" data-aos-delay="140">
+        <div class="tech-track">
+          {techStack.map((tech) => (
+            <div class="tech-item">
+              <img src={tech.icon} alt={tech.name} />
+              <span>{tech.name}</span>
+            </div>
+          ))}
+          {/* Duplicated for seamless loop */}
+          {techStack.map((tech) => (
+            <div class="tech-item" aria-hidden="true">
+              <img src={tech.icon} alt="" />
+              <span>{tech.name}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* About Me Section */}
+  <section id="quien-soy" class="py-16 md:py-24 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-8 dark:text-white" data-aos="fade-up">
+      Quién soy
+    </h2>
+    <div data-aos="fade-up" data-aos-delay="100" class="max-w-3xl mx-auto px-4">
+      <h3 class="text-2xl md:text-4xl font-bold dark:text-white mb-6">
+        Hola, soy <span class="text-monokai-cyan dark:text-monokai-green">{metadata.name}</span>
+      </h3>
+      <img
+        src="/assets/images/photo_profile_linkedin.jpeg"
+        alt={`Foto de ${metadata.name}`}
+        class="mx-auto mb-6 w-32 h-32 md:w-40 md:h-40 rounded-full object-cover ring-4 ring-monokai-purple/40 dark:ring-monokai-cyan/40 shadow-lg"
+        loading="lazy"
+      />
+      <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+        Un apasionado por la tecnología y por aprender constantemente. Me gusta leer e investigar nuevas herramientas, y siempre busco hacer las cosas bien y prestar atención al detalle. Disfruto especialmente el backend porque me lleva a analizar, cuestionar y entender la lógica del negocio. Al mismo tiempo, cuido la experiencia de usuario para que cada producto funcione bien y también se vea bien.
+      </p>
+    </div>
+  </section>
+
+  {/* Contact Section */}
+  <section id="contacto" class="py-16 md:py-24 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-10 dark:text-white" data-aos="fade-up">
+      Contacto
+    </h2>
+    <div data-aos="fade-up" data-aos-delay="100" class="max-w-xl mx-auto px-4">
+      <p class="mb-6 text-lg text-gray-700 dark:text-gray-300">
+        Si te interesa conocer más sobre mi trabajo o mis proyectos, aquí puedes contactarme.
+      </p>
+      <p class="mb-3 text-base">
+        <strong>Email:</strong>{' '}
+        <a href={`mailto:${metadata.email}`} class="text-brand-blue dark:text-monokai-cyan hover:underline font-semibold">
+          {metadata.email}
+        </a>
+      </p>
+      <p class="mb-6 text-base">
+        <strong>Teléfono:</strong>{' '}
+        <a href={`https://wa.me/52${metadata.phone.replace(/[^0-9]/g, '')}`} target="_blank" class="text-brand-blue dark:text-monokai-cyan hover:underline font-semibold">
+          {metadata.phone}
+        </a>
+      </p>
+      <div class="mt-6 flex items-center justify-center gap-6">
+        <a href={metadata.linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" class="hover:opacity-80 transition-opacity">
+          <img src="/assets/icons/linkedin.svg" alt="LinkedIn" class="w-8 h-8 icon-dark-white" />
+        </a>
+        <a href={metadata.github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" class="hover:opacity-80 transition-opacity">
+          <img src="/assets/icons/github.svg" alt="GitHub" class="w-8 h-8 icon-dark-white" />
+        </a>
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>

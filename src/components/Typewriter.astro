@@ -1,0 +1,70 @@
+---
+interface Props {
+  phrases: string[];
+}
+const { phrases } = Astro.props;
+---
+<span id="typed" data-phrases={JSON.stringify(phrases)} aria-live="polite">{phrases[0]}</span><span class="typed-cursor" aria-hidden="true">|</span>
+
+<script>
+  function initTypewriter() {
+    const el = document.getElementById('typed');
+    if (!el) return;
+
+    const phrasesAttr = el.getAttribute('data-phrases');
+    const phrases: string[] = phrasesAttr ? JSON.parse(phrasesAttr) : ['Full Stack Developer'];
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const typeSpeed = prefersReduced ? 0 : 55;
+    const backSpeed = prefersReduced ? 0 : 35;
+    const delayBetween = prefersReduced ? 2000 : 1200;
+
+    let i = 0;
+    let j = 0;
+    let deleting = false;
+
+    const cursor = document.querySelector('.typed-cursor') as HTMLElement | null;
+    if (cursor && prefersReduced) cursor.style.display = 'none';
+
+    function tick() {
+      const current = phrases[i];
+      if (!deleting) {
+        el!.textContent = current.slice(0, j + 1);
+        j++;
+        if (j === current.length) {
+          setTimeout(() => {
+            deleting = true;
+            requestAnimationFrame(step);
+          }, delayBetween);
+          return;
+        }
+      } else {
+        el!.textContent = current.slice(0, j - 1);
+        j--;
+        if (j === 0) {
+          deleting = false;
+          i = (i + 1) % phrases.length;
+        }
+      }
+      setTimeout(step, deleting ? backSpeed : typeSpeed);
+    }
+
+    function step() {
+      if (prefersReduced) {
+        el!.textContent = phrases[i];
+        i = (i + 1) % phrases.length;
+        setTimeout(step, 2000);
+        return;
+      }
+      tick();
+    }
+
+    step();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initTypewriter);
+  } else {
+    initTypewriter();
+  }
+</script>

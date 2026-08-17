@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SMTP">
+  <rect x="6" y="12" width="52" height="40" rx="8" fill="#66D9EF"/>
+  <path d="M12 20h40v24H12z" fill="#272822" opacity=".14"/>
+  <path d="M12 22 32 36 52 22" fill="none" stroke="#272822" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="32" y="49" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="700" fill="#272822">SMTP</text>
+</svg>

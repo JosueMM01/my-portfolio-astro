@@ -1,0 +1,213 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FabButtons from '../components/FabButtons.astro';
+import { metadata } from '../data/metadata';
+import 'aos/dist/aos.css';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  lang?: 'es' | 'en';
+  robots?: string;
+  currentPath?: string;
+  altPath?: string;
+}
+
+const {
+  title,
+  description,
+  lang = 'es',
+  robots,
+  currentPath = Astro.url.pathname,
+  altPath,
+} = Astro.props;
+
+const inEnglish = lang === 'en';
+const pageTitle = title
+  ? `${title} | ${metadata.name}`
+  : inEnglish
+  ? metadata.titleEn
+  : metadata.title;
+const pageDesc = description || (inEnglish ? metadata.descriptionEn : metadata.description);
+
+// Calculate canonical & hreflang
+const canonicalUrl = new URL(currentPath, metadata.url).toString();
+
+let urlES = '/';
+let urlEN = '/en/';
+
+if (altPath) {
+  if (inEnglish) {
+    urlES = altPath;
+    urlEN = currentPath;
+  } else {
+    urlES = currentPath;
+    urlEN = altPath;
+  }
+} else {
+  if (inEnglish) {
+    urlES = currentPath === '/en/' || currentPath === '/en' ? '/' : currentPath.replace('/en/', '/');
+    urlEN = currentPath;
+  } else {
+    urlES = currentPath;
+    urlEN = currentPath === '/' ? '/en/' : `/en${currentPath.startsWith('/') ? '' : '/'}${currentPath}`;
+  }
+}
+
+const fullUrlES = new URL(urlES, metadata.url).toString();
+const fullUrlEN = new URL(urlEN, metadata.url).toString();
+const ogImageUrl = new URL(metadata.ogImage, metadata.url).toString();
+---
+
+<!DOCTYPE html>
+<html lang={inEnglish ? 'en' : 'es'}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={pageDesc} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  {/* Hreflang alternates */}
+  <link rel="alternate" hreflang="es" href={fullUrlES} />
+  <link rel="alternate" hreflang="en" href={fullUrlEN} />
+  <link rel="alternate" hreflang="x-default" href={fullUrlES} />
+
+  <meta name="author" content={metadata.author} />
+  <meta name="application-name" content={metadata.brand} />
+  <meta name="theme-color" content="#272822" />
+  {robots && <meta name="robots" content={robots} />}
+  <link rel="manifest" href="/assets/site.webmanifest" />
+  <link rel="icon" type="image/png" href="/assets/images/icon.png" />
+
+  {metadata.gscVerification && (
+    <meta name="google-site-verification" content={metadata.gscVerification} />
+  )}
+
+  {/* Open Graph */}
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={metadata.brand} />
+  <meta property="og:locale" content={inEnglish ? 'en_US' : 'es_MX'} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={pageDesc} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:image" content={ogImageUrl} />
+
+  {/* Twitter */}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={pageDesc} />
+  <meta name="twitter:image" content={ogImageUrl} />
+
+  {/* Google Fonts */}
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  {/* JSON-LD Schemas */}
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": metadata.brand,
+    "url": metadata.url,
+    "logo": ogImageUrl,
+    "sameAs": [metadata.github, metadata.linkedin]
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": metadata.name,
+    "url": metadata.url,
+    "email": `mailto:${metadata.email}`,
+    "sameAs": [metadata.linkedin, metadata.github],
+    "image": ogImageUrl,
+    "jobTitle": inEnglish ? "Full Stack Software Developer" : "Desarrollador de Software y Automatización"
+  })} />
+
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": inEnglish ? "Home" : "Inicio",
+        "item": inEnglish ? `${metadata.url}/en/` : `${metadata.url}/`
+      },
+      ...(title && currentPath !== '/' && currentPath !== '/en/' ? [{
+        "@type": "ListItem",
+        "position": 2,
+        "name": title,
+        "item": canonicalUrl
+      }] : [])
+    ]
+  })} />
+</head>
+<body class="font-sans bg-white text-gray-800 dark:bg-monokai-bg dark:text-monokai-fg transition-colors duration-300">
+  
+  {/* Header */}
+  <Header lang={lang} currentPath={currentPath} altPath={altPath} />
+
+  {/* Main Content */}
+  <main class="container mx-auto px-4 py-8">
+    <slot />
+  </main>
+
+  {/* Footer */}
+  <Footer lang={lang} currentPath={currentPath} />
+
+  {/* Floating Social Icons (FAB) */}
+  <FabButtons lang={lang} />
+
+  {/* Bundled Client Scripts for Theme, AOS and Footer Observer */}
+  <script>
+    import AOS from 'aos';
+
+    // Theme initialization
+    try {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch {}
+
+    // AOS initialization
+    AOS.init({
+      duration: 700,
+      once: true,
+    });
+
+    // Unified Footer Observer to hide FAB
+    function setupFooterObserver() {
+      const footer = document.querySelector('footer');
+      const fab = document.getElementById('fab');
+
+      if (!footer || !('IntersectionObserver' in window)) return;
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const hide = entry.isIntersecting;
+          if (fab) {
+            fab.style.opacity = hide ? '0' : '1';
+            fab.style.pointerEvents = hide ? 'none' : 'auto';
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: [0, 0.05] });
+
+      io.observe(footer);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupFooterObserver);
+    } else {
+      setupFooterObserver();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,259 @@
+---
+import { metadata } from '../data/metadata';
+
+interface Props {
+  lang?: 'es' | 'en';
+  currentPath?: string;
+  altPath?: string;
+}
+
+const { lang = 'es', currentPath = '/', altPath } = Astro.props;
+const inEnglish = lang === 'en';
+
+// Calculate alternate language link
+let urlES = '/';
+let urlEN = '/en/';
+
+if (altPath) {
+  if (inEnglish) {
+    urlES = altPath;
+    urlEN = currentPath;
+  } else {
+    urlES = currentPath;
+    urlEN = altPath;
+  }
+} else {
+  if (inEnglish) {
+    urlES = currentPath === '/en/' || currentPath === '/en' ? '/' : currentPath.replace('/en/', '/');
+    urlEN = currentPath;
+  } else {
+    urlES = currentPath;
+    urlEN = currentPath === '/' ? '/en/' : `/en${currentPath.startsWith('/') ? '' : '/'}${currentPath}`;
+  }
+}
+
+const homePath = inEnglish ? '/en/' : '/';
+const baseHref = currentPath === homePath || currentPath === homePath.replace(/\/$/, '') ? '' : homePath;
+---
+
+<header id="site-header" class="bg-white/80 dark:bg-monokai-bg/80 backdrop-blur-sm sticky top-0 z-[80] border-b border-gray-200 dark:border-white/10 transition-colors">
+  <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+    <a href={homePath} class="text-xl font-bold text-brand-blue hover:opacity-90 transition-opacity">
+      {metadata.name}
+    </a>
+
+    <div class="flex items-center gap-2 md:gap-4">
+      {/* Desktop Navigation Links */}
+      <ul class="hidden md:flex space-x-6 text-gray-600 dark:text-gray-300 font-medium text-sm">
+        <li><a href={`${baseHref}#portafolio`} class="hover:text-brand-blue transition-colors">{inEnglish ? 'Portfolio' : 'Portafolio'}</a></li>
+        <li><a href={`${baseHref}#quien-soy`} class="hover:text-brand-blue transition-colors">{inEnglish ? 'About me' : 'Quién soy'}</a></li>
+        <li><a href={`${baseHref}#contacto`} class="hover:text-brand-blue transition-colors">{inEnglish ? 'Contact' : 'Contacto'}</a></li>
+      </ul>
+
+      {/* Language Switcher */}
+      <div class="flex items-center gap-1.5 text-sm font-medium">
+        {inEnglish ? (
+          <>
+            <a href={urlES} class="inline-flex items-center gap-1 hover:opacity-80 transition-opacity" aria-label="Ver en español" title="Español">
+              <img src="/assets/icons/mx.svg" alt="MX" class="w-4 h-4" /> <span class="hidden md:inline">Es</span>
+            </a>
+            <span class="text-gray-400 px-0.5">/</span>
+            <span class="inline-flex items-center gap-1 text-gray-900 dark:text-white font-bold" aria-current="true">
+              <img src="/assets/icons/us.svg" alt="US" class="w-4 h-4" /> <span class="hidden md:inline">En</span>
+            </span>
+          </>
+        ) : (
+          <>
+            <span class="inline-flex items-center gap-1 text-gray-900 dark:text-white font-bold" aria-current="true">
+              <img src="/assets/icons/mx.svg" alt="MX" class="w-4 h-4" /> <span class="hidden md:inline">Es</span>
+            </span>
+            <span class="text-gray-400 px-0.5">/</span>
+            <a href={urlEN} class="inline-flex items-center gap-1 hover:opacity-80 transition-opacity" aria-label="View in English" title="English">
+              <img src="/assets/icons/us.svg" alt="US" class="w-4 h-4" /> <span class="hidden md:inline">En</span>
+            </a>
+          </>
+        )}
+      </div>
+
+      {/* Download CV */}
+      <a
+        id="cv-download"
+        href={inEnglish ? "/assets/cv/Josue_Martinez_Moreno_CV_EN.pdf" : "/assets/cv/Josue_Martinez_Moreno_CV_ES.pdf"}
+        download
+        class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-semibold bg-brand-blue/10 text-brand-blue hover:bg-brand-blue/20 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+        </svg>
+        <span>{inEnglish ? 'Download CV' : 'Descargar CV'}</span>
+      </a>
+
+      {/* Dark / Light Theme Toggle */}
+      <button
+        id="theme-toggle"
+        aria-label={inEnglish ? "Toggle dark mode" : "Cambiar modo oscuro"}
+        class="h-9 w-9 p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center cursor-pointer transition-colors"
+      >
+        <img id="sun-icon" src="/assets/icons/icon-sun.png" alt="Light mode" class="h-5 w-5 hidden icon-dark-white" />
+        <img id="moon-icon" src="/assets/icons/moon.svg" alt="Dark mode" class="h-5 w-5 hidden icon-dark-white" />
+      </button>
+
+      {/* Mobile Hamburger Toggle Button */}
+      <button
+        id="mobile-menu-toggle"
+        class="md:hidden h-9 w-9 p-2 rounded-md hover:bg-gray-200/60 dark:hover:bg-white/10 text-gray-900 dark:text-white flex items-center justify-center cursor-pointer"
+        aria-label="Abrir menú"
+        aria-controls="mobile-menu"
+        aria-expanded="false"
+      >
+        <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  {/* Overlay for Mobile Menu */}
+  <div id="menu-overlay" class="fixed inset-0 hidden bg-black/55 backdrop-blur-lg z-[60] md:hidden" aria-hidden="true"></div>
+
+  {/* Mobile Menu Lateral Drawer */}
+  <aside
+    id="mobile-menu"
+    class="fixed left-0 top-0 z-[70] md:hidden h-screen w-[60vw] max-w-xs bg-white dark:bg-monokai-bg border-r border-gray-200 dark:border-white/10 shadow-2xl ring-1 ring-black/10 dark:ring-white/10 transform -translate-x-full transition-transform duration-300 will-change-transform flex flex-col justify-between"
+  >
+    <div>
+      <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-white/10">
+        <div class="text-lg font-bold text-brand-blue">{metadata.name}</div>
+        <button
+          id="mobile-menu-close"
+          class="h-9 w-9 p-2 rounded-full border border-gray-300 dark:border-white/30 bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-900 dark:text-white flex items-center justify-center cursor-pointer"
+          aria-label="Cerrar menú"
+        >
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <path d="M6 6 L18 18 M18 6 L6 18"></path>
+          </svg>
+        </button>
+      </div>
+
+      <ul class="flex flex-col p-4 space-y-2 text-gray-700 dark:text-gray-200">
+        <li>
+          <a href={`${baseHref}#portafolio`} class="block py-3 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            {inEnglish ? 'Portfolio' : 'Portafolio'}
+          </a>
+        </li>
+        <li>
+          <a href={`${baseHref}#quien-soy`} class="block py-3 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            {inEnglish ? 'About me' : 'Quién soy'}
+          </a>
+        </li>
+        <li>
+          <a href={`${baseHref}#contacto`} class="block py-3 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            {inEnglish ? 'Contact' : 'Contacto'}
+          </a>
+        </li>
+        <li class="pt-3 pb-2 border-t border-gray-200 dark:border-white/10"></li>
+        <li>
+          <a
+            href={inEnglish ? "/assets/cv/Josue_Martinez_Moreno_CV_EN.pdf" : "/assets/cv/Josue_Martinez_Moreno_CV_ES.pdf"}
+            download
+            class="flex items-center gap-2 py-3 px-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 font-semibold text-brand-blue transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+            </svg>
+            <span>{inEnglish ? 'Download CV' : 'Descargar CV'}</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </aside>
+</header>
+
+<script>
+  function setupHeader() {
+    const themeToggle = document.getElementById('theme-toggle');
+    const sunIcon = document.getElementById('sun-icon');
+    const moonIcon = document.getElementById('moon-icon');
+
+    const updateIcons = (theme: string) => {
+      if (theme === 'dark') {
+        sunIcon?.classList.remove('hidden');
+        moonIcon?.classList.add('hidden');
+      } else {
+        sunIcon?.classList.add('hidden');
+        moonIcon?.classList.remove('hidden');
+      }
+    };
+
+    const isDark = document.documentElement.classList.contains('dark');
+    updateIcons(isDark ? 'dark' : 'light');
+
+    themeToggle?.addEventListener('click', () => {
+      const isCurrentlyDark = document.documentElement.classList.contains('dark');
+      const newTheme = isCurrentlyDark ? 'light' : 'dark';
+      if (newTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('theme', newTheme);
+      updateIcons(newTheme);
+    });
+
+    // Mobile Menu Controls
+    const toggle = document.getElementById('mobile-menu-toggle');
+    const panel = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('menu-overlay');
+    const closeBtn = document.getElementById('mobile-menu-close');
+
+    if (!toggle || !panel || !overlay) return;
+
+    function openMenu() {
+      panel?.classList.remove('-translate-x-full');
+      overlay?.classList.remove('hidden');
+      toggle?.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('overflow-hidden');
+      document.documentElement.classList.add('menu-open');
+    }
+
+    function closeMenu() {
+      panel?.classList.add('-translate-x-full');
+      overlay?.classList.add('hidden');
+      toggle?.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('overflow-hidden');
+      document.documentElement.classList.remove('menu-open');
+    }
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (isOpen) closeMenu(); else openMenu();
+    });
+
+    overlay.addEventListener('click', closeMenu);
+    closeBtn?.addEventListener('click', closeMenu);
+    panel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+    // Close when clicking anywhere outside the drawer
+    document.addEventListener('click', (e) => {
+      const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      if (!isOpen) return;
+      const target = e.target as Node;
+      const clickInsidePanel = panel.contains(target) || toggle.contains(target);
+      if (!clickInsidePanel) closeMenu();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupHeader);
+  } else {
+    setupHeader();
+  }
+</script>

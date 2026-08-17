@@ -1,0 +1,93 @@
+---
+import { metadata } from '../data/metadata';
+
+interface Props {
+  lang?: 'es' | 'en';
+}
+
+const { lang = 'es' } = Astro.props;
+const inEnglish = lang === 'en';
+---
+
+<div id="fab" class="fixed bottom-6 right-6 z-50 transition-all duration-300">
+  <div class="relative">
+    {/* Toggle Main Button */}
+    <button
+      id="fab-toggle"
+      type="button"
+      aria-label={inEnglish ? "Open quick social links" : "Abrir accesos rápidos"}
+      class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-brand-cyan hover:opacity-90 text-white shadow-xl transition-transform duration-200 focus:outline-none cursor-pointer active:scale-95"
+    >
+      <img src="/assets/icons/plus.svg" alt="+" class="w-8 h-8 icon-white pointer-events-none" />
+    </button>
+
+    {/* Dropdown Items */}
+    <div class="absolute inset-0 pointer-events-none">
+      {/* WhatsApp (Top) */}
+      <a
+        href={metadata.whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+        class="fab-item item-whatsapp pointer-events-auto absolute left-0 top-0 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#25D366] text-white shadow-lg transition duration-300 ease-out will-change-transform hover:scale-105"
+      >
+        <img src="/assets/icons/whatsapp.svg" alt="WhatsApp" class="w-7 h-7 icon-white" />
+      </a>
+
+      {/* LinkedIn (Left) */}
+      <a
+        href={metadata.linkedin}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="LinkedIn"
+        class="fab-item item-linkedin pointer-events-auto absolute left-0 top-0 inline-flex items-center justify-center w-14 h-14 rounded-full bg-[#0A66C2] text-white shadow-lg transition duration-300 ease-out will-change-transform hover:scale-105"
+      >
+        <img src="/assets/icons/linkedin.svg" alt="LinkedIn" class="w-7 h-7 icon-white" />
+      </a>
+
+      {/* GitHub (Top-Left Diagonal) */}
+      <a
+        href={metadata.github}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="GitHub"
+        class="fab-item item-github pointer-events-auto absolute left-0 top-0 inline-flex items-center justify-center w-14 h-14 rounded-full bg-black text-white shadow-lg transition duration-300 ease-out will-change-transform dark:bg-gray-900 hover:scale-105"
+      >
+        <img src="/assets/icons/github.svg" alt="GitHub" class="w-7 h-7 icon-white" />
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function setupFab() {
+    const fab = document.getElementById('fab');
+    const toggle = document.getElementById('fab-toggle');
+    if (!fab || !toggle) return;
+
+    function closeFab() {
+      fab?.classList.remove('open');
+    }
+
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      fab.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!fab.contains(e.target as Node)) {
+        closeFab();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFab();
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupFab);
+  } else {
+    setupFab();
+  }
+</script>

@@ -1,0 +1,248 @@
+---
+---
+<canvas id="hero-bg" class="absolute inset-0 w-full h-full -z-10 pointer-events-none"></canvas>
+
+<script>
+  function initConstellation() {
+    const canvas = document.getElementById('hero-bg') as HTMLCanvasElement | null;
+    if (!canvas) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = 0, height = 0, dpr = 1;
+    interface Particle {
+      x: number;
+      y: number;
+      vx: number;
+      vy: number;
+      r: number;
+    }
+    let particles: Particle[] = [];
+    let rafId: number | null = null;
+
+    const cfg = {
+      maxDist: 130,
+      baseLineAlpha: 0.10,
+      pointColor: 'rgba(102, 217, 239, 0.7)',
+      pulse: {
+        maxActive: 18,
+        spawnEveryMs: 280,
+        fadeInMs: 600,
+        holdMs: 1600,
+        fadeOutMs: 600,
+        maxScale: 2.0
+      },
+      drift: {
+        minSpeed: 0.02,
+        noise: 0.0015,
+        friction: 0.996
+      }
+    };
+    const isMobile = () => width < 640;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas!.clientWidth;
+      height = canvas!.clientHeight;
+      canvas!.width = Math.floor(width * dpr);
+      canvas!.height = Math.floor(height * dpr);
+      ctx!.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function createParticles() {
+      const base = Math.max(isMobile() ? 45 : 60, Math.floor(width * height / (isMobile() ? 22000 : 18000)));
+      particles = Array.from({ length: base }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: Math.random() * 1.2 + 0.7
+      }));
+    }
+
+    let mouse = { x: -9999, y: -9999 };
+    function onMouseMove(e: MouseEvent) {
+      const rect = canvas!.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }
+    function onMouseLeave() {
+      mouse.x = -9999;
+      mouse.y = -9999;
+    }
+
+    interface Pulse {
+      i: number;
+      alpha: number;
+      state: 'in' | 'hold' | 'out';
+      life: number;
+    }
+    const pulses: Pulse[] = [];
+    const pulsed = new Set<number>();
+    let nextPulseSpawn = 0;
+
+    function spawnPulse() {
+      if (pulses.length >= cfg.pulse.maxActive || particles.length === 0) return;
+      let attempts = 0;
+      let idx: number;
+      do {
+        idx = Math.floor(Math.random() * particles.length);
+        attempts++;
+        if (attempts > 10) break;
+      } while (pulsed.has(idx));
+      pulsed.add(idx);
+      pulses.push({ i: idx, alpha: 0, state: 'in', life: 0 });
+    }
+
+    function updatePulses(dt: number) {
+      for (let k = pulses.length - 1; k >= 0; k--) {
+        const pu = pulses[k];
+        pu.life += dt;
+        if (pu.state === 'in') {
+          pu.alpha = Math.min(1, pu.life / cfg.pulse.fadeInMs);
+          if (pu.life >= cfg.pulse.fadeInMs) { pu.state = 'hold'; pu.life = 0; }
+        } else if (pu.state === 'hold') {
+          pu.alpha = 1;
+          if (pu.life >= cfg.pulse.holdMs) { pu.state = 'out'; pu.life = 0; }
+        } else if (pu.state === 'out') {
+          pu.alpha = Math.max(0, 1 - pu.life / cfg.pulse.fadeOutMs);
+          if (pu.life >= cfg.pulse.fadeOutMs) {
+            pulsed.delete(pu.i);
+            pulses.splice(k, 1);
+          }
+        }
+      }
+    }
+
+    function draw() {
+      ctx!.clearRect(0, 0, width, height);
+
+      // Points
+      ctx!.fillStyle = cfg.pointColor;
+      for (const p of particles) {
+        ctx!.beginPath();
+        ctx!.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx!.fill();
+      }
+
+      // Connecting lines
+      const dark = document.documentElement.classList.contains('dark');
+      ctx!.strokeStyle = dark ? `rgba(255, 255, 255, ${cfg.baseLineAlpha})` : `rgba(0, 0, 0, ${cfg.baseLineAlpha * 0.8})`;
+      ctx!.lineWidth = 0.8;
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const a = particles[i], b = particles[j];
+          const dx = a.x - b.x, dy = a.y - b.y;
+          const dist2 = dx * dx + dy * dy;
+          if (dist2 < cfg.maxDist * cfg.maxDist) {
+            ctx!.globalAlpha = 1 - dist2 / (cfg.maxDist * cfg.maxDist);
+            ctx!.beginPath();
+            ctx!.moveTo(a.x, a.y);
+            ctx!.lineTo(b.x, b.y);
+            ctx!.stroke();
+            ctx!.globalAlpha = 1;
+          }
+        }
+      }
+
+      // Pulsing nodes
+      if (pulses.length) {
+        for (const pu of pulses) {
+          const p = particles[pu.i];
+          if (!p) continue;
+          const r = p.r * (1 + (cfg.pulse.maxScale - 1) * pu.alpha);
+          const alpha = 0.15 + 0.85 * pu.alpha;
+          ctx!.fillStyle = `rgba(102, 217, 239, ${alpha})`;
+          ctx!.beginPath();
+          ctx!.arc(p.x, p.y, r, 0, Math.PI * 2);
+          ctx!.fill();
+        }
+      }
+    }
+
+    let lastTs = performance.now();
+    function step(ts: number) {
+      const dt = Math.min(100, ts - lastTs);
+      lastTs = ts;
+
+      for (const p of particles) {
+        const dx = p.x - mouse.x, dy = p.y - mouse.y;
+        const dist2 = dx * dx + dy * dy;
+        if (dist2 < 140 * 140) {
+          p.vx += dx * -0.00005;
+          p.vy += dy * -0.00005;
+        }
+        p.vx += (Math.random() - 0.5) * cfg.drift.noise;
+        p.vy += (Math.random() - 0.5) * cfg.drift.noise;
+        const speed = Math.hypot(p.vx, p.vy);
+        if (speed < cfg.drift.minSpeed) {
+          const angle = Math.random() * Math.PI * 2;
+          p.vx += Math.cos(angle) * cfg.drift.minSpeed;
+          p.vy += Math.sin(angle) * cfg.drift.minSpeed;
+        }
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < -2) p.x = width + 2; else if (p.x > width + 2) p.x = -2;
+        if (p.y < -2) p.y = height + 2; else if (p.y > height + 2) p.y = -2;
+        p.vx *= cfg.drift.friction;
+        p.vy *= cfg.drift.friction;
+      }
+
+      updatePulses(dt);
+      if (ts >= nextPulseSpawn) {
+        spawnPulse();
+        nextPulseSpawn = ts + cfg.pulse.spawnEveryMs;
+      }
+
+      draw();
+      rafId = requestAnimationFrame(step);
+    }
+
+    function start() {
+      resize();
+      createParticles();
+      draw();
+      if (!prefersReduced) rafId = requestAnimationFrame(step);
+    }
+
+    const ro = new ResizeObserver(() => {
+      resize();
+      createParticles();
+    });
+    ro.observe(canvas);
+    canvas.addEventListener('mousemove', onMouseMove);
+    canvas.addEventListener('mouseleave', onMouseLeave);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = null;
+      } else if (!prefersReduced && !rafId) {
+        rafId = requestAnimationFrame(step);
+      }
+    });
+
+    const hero = document.getElementById('inicio');
+    if (hero && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            start();
+            io.disconnect();
+          }
+        });
+      }, { rootMargin: '0px 0px -20% 0px' });
+      io.observe(hero);
+    } else {
+      start();
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initConstellation);
+  } else {
+    initConstellation();
+  }
+</script>

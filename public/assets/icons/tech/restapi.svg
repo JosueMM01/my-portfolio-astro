@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="REST API">
+  <rect x="4" y="10" width="56" height="44" rx="10" fill="#272822"/>
+  <rect x="8" y="14" width="48" height="36" rx="8" fill="#66D9EF"/>
+  <path d="M17 39V25h9.2c4.5 0 7 2.3 7 6 0 3.6-2.5 6-7 6H22v2h-5Zm5-6h3.8c1.5 0 2.4-.7 2.4-2s-.9-2-2.4-2H22v4Zm15 6V25h5v10h7v4H37Z" fill="#272822"/>
+</svg>

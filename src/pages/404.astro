@@ -1,0 +1,33 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  lang="es"
+  title="Página no encontrada"
+  description="La página que buscas no existe o fue movida."
+  robots="noindex, nofollow"
+  currentPath="/404.html"
+>
+  <section class="text-center py-24 max-w-lg mx-auto px-4">
+    <div class="inline-flex items-center justify-center w-20 h-20 rounded-3xl bg-brand-cyan/10 text-brand-cyan mb-6 text-3xl font-extrabold">
+      404
+    </div>
+    <h1 class="text-3xl md:text-4xl font-bold mb-4 dark:text-white">Página no encontrada</h1>
+    <p class="text-gray-600 dark:text-gray-300 mb-8">La página que buscas no existe o fue movida.</p>
+    <a
+      href="/"
+      class="inline-flex items-center justify-center bg-brand-cyan text-white font-bold py-3 px-8 rounded-xl hover:opacity-90 transition shadow-md hover:shadow-lg"
+    >
+      Volver al inicio
+    </a>
+  </section>
+
+  <script>
+    try {
+      if (location && location.pathname && location.pathname.indexOf('/en/') === 0) {
+        location.replace('/en/404.html');
+      }
+    } catch (e) {}
+  </script>
+</BaseLayout>
