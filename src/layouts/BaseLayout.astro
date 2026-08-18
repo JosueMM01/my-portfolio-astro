@@ -145,6 +145,18 @@ const ogImageUrl = new URL(metadata.ogImage, metadata.url).toString();
       }] : [])
     ]
   })} />
+
+  <script is:inline>
+    try {
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    } catch {}
+  </script>
 </head>
 <body class="font-sans bg-white text-gray-800 dark:bg-monokai-bg dark:text-monokai-fg transition-colors duration-300">
   
@@ -165,17 +177,6 @@ const ogImageUrl = new URL(metadata.ogImage, metadata.url).toString();
   {/* Bundled Client Scripts for Theme, AOS and Footer Observer */}
   <script>
     import AOS from 'aos';
-
-    // Theme initialization
-    try {
-      const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (saved === 'dark' || (!saved && prefersDark)) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
-    } catch {}
 
     // AOS initialization
     AOS.init({
